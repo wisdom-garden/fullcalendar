@@ -77,6 +77,8 @@ function Toolbar(calendar, toolbarOptions) {
 					var buttonClick;
 					var overrideText; // text explicitly set by calendar's constructor options. overcomes icons
 					var defaultText;
+					var defaultRichText;
+					var defaultRichContent;
 					var themeIcon;
 					var normalIcon;
 					var innerHtml;
@@ -96,6 +98,8 @@ function Toolbar(calendar, toolbarOptions) {
 							};
 							overrideText = ''; // icons will override text
 							defaultText = customButtonProps.text;
+							defaultRichText = customButtonProps.richText;
+							defaultRichContent = customButtonProps.richContent;
 						}
 						else if ((viewSpec = calendar.getViewSpec(buttonName))) {
 							buttonClick = function() {
@@ -113,8 +117,10 @@ function Toolbar(calendar, toolbarOptions) {
 							defaultText = calendarButtonText[buttonName]; // everything else is considered default
 						}
 
-						if (buttonClick) {
-
+						if (defaultRichContent) {
+						    groupChildren = groupChildren.add(defaultRichContent);
+                        }
+						else if (buttonClick) {
 							themeIcon =
 								customButtonProps ?
 									customButtonProps.themeIcon :
@@ -134,6 +140,9 @@ function Toolbar(calendar, toolbarOptions) {
 							else if (normalIcon && !calendar.opt('theme')) {
 								innerHtml = "<span class='fc-icon fc-icon-" + normalIcon + "'></span>";
 							}
+							else if (defaultRichText) {
+							    innerHtml = defaultRichText
+                            }
 							else {
 								innerHtml = htmlEscape(defaultText);
 							}
@@ -143,13 +152,30 @@ function Toolbar(calendar, toolbarOptions) {
 								tm + '-button',
 								tm + '-state-default'
 							];
-
-							button = $( // type="button" so that it doesn't submit a form
-								'<button type="button" class="' + classes.join(' ') + '">' +
-									innerHtml +
-								'</button>'
+							
+							if (buttonName == 'prev') {
+								button = $(
+									'<a class="' + classes.join(' ') + '">' +
+										'<i class="font font-arrow-left-middle"></i>' +
+									'</a>'
 								)
-								.click(function(ev) {
+							}
+							else if (buttonName == 'next') {
+								button = $(
+									'<a class="' + classes.join(' ') + '">' +
+										'<i class="font font-arrow-right-middle"></i>' +
+									'</a>'
+								)
+							}
+							else {
+								button = $( // type="button" so that it doesn't submit a form
+									'<button type="button" class="' + classes.join(' ') + '">' +
+										innerHtml +
+									'</button>'
+								)
+							}
+							
+							button.click(function(ev) {
 									// don't process clicks for disabled buttons
 									if (!button.hasClass(tm + '-state-disabled')) {
 
