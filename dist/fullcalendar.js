@@ -2304,6 +2304,11 @@ var Popover = Class.extend(ListenerMixin, {
 		// when a click happens on anything inside with a 'fc-close' className, hide the popover
 		this.el.on('click', '.fc-close', function() {
 			_this.hide();
+			
+			// to integrate webui-popover with fullcalendar
+			if (WebuiPopovers) {
+				WebuiPopovers.hideAll();
+			}
 		});
 
 		if (options.autoHide) {
@@ -7404,7 +7409,7 @@ DayGrid.mixin({
 			content: this.renderSegPopoverContent(row, col, segs),
 			parentEl: this.view.el, // attach to root of view. guarantees outside of scrollbars.
 			top: topEl.offset().top,
-			autoHide: true, // when the user clicks elsewhere, hide the popover
+			autoHide: false, // when the user clicks elsewhere, hide the popover
 			viewportConstrain: view.opt('popoverViewportConstrain'),
 			hide: function() {
 				// kill everything when the popover is hidden
