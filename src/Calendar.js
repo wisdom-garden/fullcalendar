@@ -308,6 +308,9 @@ var Calendar = FC.Calendar = Class.extend({
 		var prevInfo = this.view.buildPrevDateProfile(this.currentDate);
 
 		if (prevInfo.isValid) {
+			if (WebuiPopovers) {
+				WebuiPopovers.hideAll();
+			}
 			this.currentDate = prevInfo.date;
 			this.renderView();
 		}
@@ -318,6 +321,9 @@ var Calendar = FC.Calendar = Class.extend({
 		var nextInfo = this.view.buildNextDateProfile(this.currentDate);
 
 		if (nextInfo.isValid) {
+			if (WebuiPopovers) {
+				WebuiPopovers.hideAll();
+			}
 			this.currentDate = nextInfo.date;
 			this.renderView();
 		}
@@ -337,6 +343,9 @@ var Calendar = FC.Calendar = Class.extend({
 
 
 	today: function() {
+		if (WebuiPopovers) {
+			WebuiPopovers.hideAll();
+		}
 		this.currentDate = this.getNow(); // should deny like prev/next?
 		this.renderView();
 	},
